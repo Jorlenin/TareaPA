@@ -38,6 +38,7 @@ public class Menu extends javax.swing.JFrame {
         btnAgencia = new javax.swing.JButton();
         btnCarro = new javax.swing.JButton();
         btnCliente = new javax.swing.JButton();
+        btnConsulta = new javax.swing.JButton();
         lblFondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -65,12 +66,20 @@ public class Menu extends javax.swing.JFrame {
                 btnClienteActionPerformed(evt);
             }
         });
-        getContentPane().add(btnCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(121, 202, 75, -1));
+        getContentPane().add(btnCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 190, 75, -1));
+
+        btnConsulta.setText("Consulta");
+        btnConsulta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConsultaActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnConsulta, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 240, 90, -1));
 
         lblFondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/images.jpeg"))); // NOI18N
         lblFondo.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         lblFondo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        getContentPane().add(lblFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(-4, -1, 340, 300));
+        getContentPane().add(lblFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(-4, -1, 330, 300));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -89,6 +98,11 @@ public class Menu extends javax.swing.JFrame {
         FrmCliente Cl=new FrmCliente();
         Cl.setVisible(true);
     }//GEN-LAST:event_btnClienteActionPerformed
+
+    private void btnConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultaActionPerformed
+        Historial Hi=new Historial();
+        Hi.setVisible(true);
+    }//GEN-LAST:event_btnConsultaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -138,6 +152,7 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JButton btnAgencia;
     private javax.swing.JButton btnCarro;
     private javax.swing.JButton btnCliente;
+    private javax.swing.JButton btnConsulta;
     private javax.swing.JLabel lblFondo;
     // End of variables declaration//GEN-END:variables
 }

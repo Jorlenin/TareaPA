@@ -5,8 +5,10 @@
 package miprimerdb;
 
 import java.awt.Image;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -111,9 +113,19 @@ public class Agencia extends javax.swing.JFrame {
         getContentPane().add(btnEnviar, new org.netbeans.lib.awtextra.AbsoluteConstraints(443, 65, 92, -1));
 
         btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(442, 113, 93, -1));
 
         btnActualizar.setText("Actualizar");
+        btnActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(442, 159, 93, -1));
 
         jTAgencia.setModel(new javax.swing.table.DefaultTableModel(
@@ -168,7 +180,58 @@ public class Agencia extends javax.swing.JFrame {
         this.mouseclick();
     }//GEN-LAST:event_jTAgenciaMouseClicked
 
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        this.Eliminar();
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
+    private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
+       this.Actualizar();
+    }//GEN-LAST:event_btnActualizarActionPerformed
+
+
+    
+    public void Actualizar() {
+     Basededatos db = new Basededatos("localhost:3306","root","root","Carros");
+
+    try {
+        db.ConectarDB();
+        AgenciaBeans Ag=new AgenciaBeans();
+        String query = "UPDATE Agencia SET NombreAgencia=?, Ubicacion=?, Telefono=? WHERE ID_Agencia=?";
+        PreparedStatement pstmt = db.getConexion().prepareStatement(query);
+        pstmt.setString(1, txtNombreAgencia.getText());
+        pstmt.setString(2, txtUbicacion.getText());
+        pstmt.setString(3, txtTelefono.getText());
+        pstmt.setInt(4, (int) jTAgencia.getValueAt(jTAgencia.getSelectedRow(), 0));
+
+        pstmt.executeUpdate();
+ 
+        System.out.println("Transacción exitosa....Commit");
+        this.mostrar(jTAgencia,"Select * from Agencia");
+    } catch (SQLException e) {
+        System.out.println("Error de la transacción...RollBack: " + e.toString());
+    } finally {
+    }
+}
+        private void Eliminar(){
+    Basededatos db = new Basededatos("localhost:3306","root","root","Carros");
+    String query="delete from AGencia  "+ "where ID_Agencia='"+jTAgencia.getValueAt(jTAgencia.getSelectedRow(),0)+"';";
+    try {
+        db.ConectarDB();
+        PreparedStatement pstmt = db.getConexion().prepareStatement(query);
+        txtNombreAgencia.setText("");
+        txtUbicacion.setText("");
+        txtTelefono.setText("");
+        pstmt.executeUpdate();
+    
+    System.out.println("Transacción exitosa....Commit");
+        this.mostrar(jTAgencia,"Select * from Agencia");
+    } catch (SQLException e) {
+        System.out.println("Error de la transacción...RollBack: " + e.toString());
+    } finally {
+    }
+    }
+    
+    
     private  void pintarImagen(JLabel lbl, String ruta){
     
            this.imagen = new ImageIcon(ruta);

@@ -5,8 +5,10 @@
 package miprimerdb;
 
 import java.awt.Image;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -119,9 +121,19 @@ public class FrmCarro extends javax.swing.JFrame {
         getContentPane().add(btnEnviar, new org.netbeans.lib.awtextra.AbsoluteConstraints(443, 65, 92, -1));
 
         btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(442, 113, 93, -1));
 
         btnActualizar.setText("Actualizar");
+        btnActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(442, 159, 93, -1));
 
         jTCarro.setModel(new javax.swing.table.DefaultTableModel(
@@ -180,6 +192,14 @@ public class FrmCarro extends javax.swing.JFrame {
     private void jTCarroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTCarroMouseClicked
         this.mouseclick();
     }//GEN-LAST:event_jTCarroMouseClicked
+
+    private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
+       this.Actualizar();
+    }//GEN-LAST:event_btnActualizarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        this.Eliminar();
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void nuevo(){
     try{
@@ -249,6 +269,50 @@ private void mostrar(javax.swing.JTable JT, String sql){
      txtObservacion.setText(jTCarro.getModel().getValueAt(fila, 4).toString());
      
 }
+    
+    
+        public void Actualizar() {
+     Basededatos db = new Basededatos("localhost:3306","root","root","Carros");
+
+    try {
+        db.ConectarDB();
+        CarroBeans Ca=new CarroBeans();
+        String query = "UPDATE Carro SET NombreCarro=?, ModeloCarro=?, TipoCarro=?, observacion=? WHERE ID_Carro=?";
+        PreparedStatement pstmt = db.getConexion().prepareStatement(query);
+        pstmt.setString(1, txtNombreCarro.getText());
+        pstmt.setString(2, txtModeloCarro.getText());
+        pstmt.setString(3, txtTipoCarro.getText());
+        pstmt.setString(4, txtObservacion.getText());
+        pstmt.setInt(5, (int) jTCarro.getValueAt(jTCarro.getSelectedRow(), 0));
+
+        pstmt.executeUpdate();
+        System.out.println("Transacción exitosa....Commit");
+        this.mostrar(jTCarro,"Select * from Carro");
+    } catch (SQLException e) {
+        System.out.println("Error de la transacción...RollBack: " + e.toString());
+    } finally {
+    }
+}
+        private void Eliminar(){
+    Basededatos db = new Basededatos("localhost:3306","root","root","Carros");
+    String query="delete from Carro  "+ "where ID_Carro='"+jTCarro.getValueAt(jTCarro.getSelectedRow(),0)+"';";
+    try {
+        db.ConectarDB();
+        PreparedStatement pstmt = db.getConexion().prepareStatement(query);
+        txtNombreCarro.setText("");
+        txtModeloCarro.setText("");
+        txtModeloCarro.setText("");
+        txtObservacion.setText("");
+        pstmt.executeUpdate();
+    
+    System.out.println("Transacción exitosa....Commit");
+        this.mostrar(jTCarro,"Select * from Carro");
+    } catch (SQLException e) {
+        System.out.println("Error de la transacción...RollBack: " + e.toString());
+    } finally {
+    }
+    }
+        
     private  void pintarImagen(JLabel lbl, String ruta){
     
            this.imagen = new ImageIcon(ruta);

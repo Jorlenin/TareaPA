@@ -78,6 +78,10 @@ public ResultSet ConsultaDB(String sql) throws SQLException {
     return cursor;
 }
 
+    public Connection getConexion() {
+        return conexion;
+    }
+
 public void CerrarDB() throws SQLException {
     conexion.close();
 }
